@@ -6,7 +6,7 @@ import {
   Button,
   Divider,
   Tooltip,
-  Typography
+  Typography,
 } from "@mui/material";
 import { indigo } from "@mui/material/colors";
 import Menu from "@mui/material/Menu";
@@ -20,13 +20,12 @@ interface AvatarMenuProps {
 }
 
 const getInitials = (user: User) => {
-  if (user.firstName || user.lastName) {
-    const initials = [user.firstName, user.lastName]
-      .map((_) => (_[0] ? _[0].toLocaleUpperCase() : _))
-      .join("");
-    return initials;
-  }
-  return "";
+  if (!user) return "";
+  const firstName = user.firstName || "";
+  const lastName = user.lastName || "";
+  return [firstName, lastName].map(
+    (name) => name?.[0]?.toLocaleUpperCase() || ""
+  );
 };
 
 const stringAvatar = (user: User) => {
@@ -34,12 +33,10 @@ const stringAvatar = (user: User) => {
   // 36 * 7 <= 255
   const r = Math.floor(parseInt(initials[0] ? initials[0] : "k", 36) * 7);
   const g = Math.floor(parseInt(initials[1] ? initials[1] : "l", 36) * 7);
-  const b = Math.floor(
-    parseInt(user?.firstName[1] ? user?.firstName[1] : "m", 36) * 7
-  );
+  const b = Math.floor(parseInt(user.firstName?.[1] || "m", 36) * 7);
   return {
     sx: { bgcolor: `rgb(${r},${g},${b})`, cursor: "pointer" },
-    children: initials
+    children: initials,
   };
 };
 
@@ -68,11 +65,11 @@ const AvatarMenu = (props: AvatarMenuProps) => {
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left"
+          horizontal: "left",
         }}
         transformOrigin={{
           vertical: "bottom",
-          horizontal: "left"
+          horizontal: "left",
         }}
       >
         <Box display="flex" flexDirection="column" alignItems="center" p={1}>
@@ -126,7 +123,7 @@ const AvatarMenu = (props: AvatarMenuProps) => {
             size="small"
             style={{
               color: indigo[500],
-              textTransform: "none"
+              textTransform: "none",
             }}
           >
             Data Privacy Statement
@@ -136,7 +133,7 @@ const AvatarMenu = (props: AvatarMenuProps) => {
             size="small"
             style={{
               color: indigo[500],
-              textTransform: "none"
+              textTransform: "none",
             }}
           >
             Imprint

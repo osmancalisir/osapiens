@@ -108,7 +108,7 @@ const useMatchedRoute = (
               key={path + "matchOnSubPath"}
               path={`/${path.split("/").slice(1, 2)}/*`}
             >
-              {({ match }) => (
+              {({ match }: any) => ( // Using any is not the safest type here 
                 <Transition match={match}>
                   <RouteComponent />
                 </Transition>
@@ -117,7 +117,7 @@ const useMatchedRoute = (
           ))}
         {routes.map(({ path, Component: RouteComponent }, i) => (
           <Route key={path + "root"} sensitive strict exact path={path}>
-            {({ match }) => (
+            {({ match }: any) => ( // Using any is not the safest type here 
               <Transition match={match}>
                 <RouteComponent />
               </Transition>

@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { cloneDeep } from "lodash";
 import { initReactI18next } from "react-i18next";
+// resolveJsonModule enabled in tsconfig.json file
 import de from "./locales/de.json";
 import en from "./locales/en.json";
 
@@ -19,11 +20,16 @@ const getBrowserLanguage = () => {
   return userLang ? userLang.split("-")[0] : FALLBACK_LANGUAGE;
 };
 
+const getInitialLanguage = () => {
+  const savedLanguage = localStorage.getItem("selectedLanguage");
+  return savedLanguage || getBrowserLanguage() || FALLBACK_LANGUAGE;
+};
+
 const browserLanguage = getBrowserLanguage();
 
 export const defaultTranslationModules = [
   { locale: "de", texts: de },
-  { locale: "en", texts: en }
+  { locale: "en", texts: en },
 ];
 export const defaultLanguages = defaultTranslationModules.map((m) => m.locale);
 
@@ -43,11 +49,14 @@ i18n
     resources,
     ns: ["common", "app"],
     defaultNS: "app",
-    lng: FALLBACK_LANGUAGE || browserLanguage,
+    lng: getInitialLanguage(),
     fallbackLng: FALLBACK_LANGUAGE,
     interpolation: {
-      escapeValue: false // not needed for react as it escapes by default
-    }
+      escapeValue: false, // not needed for react as it escapes by default
+    },
+    react: {
+      useSuspense: false,
+    },
   });
 
 export default i18n;
